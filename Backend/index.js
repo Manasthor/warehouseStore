@@ -3,9 +3,27 @@ import './DB/config.js';
 import Cors from 'cors';
 import User from './DB/User.js';
 import Product from './DB/Product.js';
+import dotenv from 'dotenv';
+// import path from 'path';
+// import { fileURLToPath } from 'url';
+dotenv.config();
 const app = express();
 app.use(json());
-app.use(Cors());
+app.use(Cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
+}));
+
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
+
+// app.use(express.static(path.join(__dirname, '../front-end/dist')));
+
+// app.get('*', (req, res) => {
+//     res.sendFile(path.join(__dirname, '../front-end/dist/index.html'));
+// });
+
 app.post('/register', async (req, resp) => {
     let user = new User(req.body);
     let result = await user.save();
@@ -76,7 +94,7 @@ app.get('/search/:key', async (req, res) => {
     res.send(result);
 });
 
-app.get('/user/:userId', async (req,res)=>{
+app.get('/user/:userId', async (req, res) => {
     const user = await User.findById(req.params.userId).select("name email");
     if (!user) {
         res.status(404).json({ message: "No user found" });
@@ -85,4 +103,8 @@ app.get('/user/:userId', async (req,res)=>{
     }
 });
 
-app.listen(5000);
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+ 

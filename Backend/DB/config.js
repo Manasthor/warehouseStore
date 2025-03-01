@@ -1,2 +1,5 @@
 import { connect } from 'mongoose';
-connect('mongodb://localhost:27017/e-Commerce')
+import dotenv from 'dotenv';
+
+dotenv.config();
+connect(process.env.MONGO_URI);
