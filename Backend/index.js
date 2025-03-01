@@ -15,6 +15,10 @@ app.use(Cors({
     credentials: true,
 }));
 
+app.get("/", (req, res) => {
+    res.send("Warehouse Store Backend is running!");
+});
+
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename);
 
