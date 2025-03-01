@@ -9,7 +9,7 @@ const Login = () => {
     useEffect(() => {
         const auth = localStorage.getItem('user');
         if (auth) {
-            navigate('/');
+            navigate('./Productslist.jsx');
         }
     }, [navigate]);
 
