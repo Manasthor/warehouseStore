@@ -14,24 +14,32 @@ const Login = () => {
     }, [navigate]);
 
     const handleLogin = async () => {
-        let result = await fetch('http://localhost:5000/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email,
-                password,
-            }),
-        });
-        let ans = await result.json();
-        if (ans.name) {
-            localStorage.setItem('user', JSON.stringify(ans));
-            navigate('/');
-        } else {
-            alert('Invalid Email or Password');
+        try {
+            let result = await fetch('http://localhost:5000/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            });
+    
+            if (!result.ok) {
+                throw new Error('Network response was not ok');
+            }
+    
+            let ans = await result.json();
+            if (ans.name) {
+                localStorage.setItem('user', JSON.stringify(ans));
+                navigate('/');
+            } else {
+                alert('Invalid Email or Password');
+            }
+        } catch (error) {
+            console.error('Login failed:', error);
+            alert('Login failed. Please check console for details.');
         }
     };
+    
 
     return (
         <div className="m-30 p-10">
