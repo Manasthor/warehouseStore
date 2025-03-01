@@ -40,7 +40,7 @@ app.post('/login', async (req, resp) => {
     if (req.body.email && req.body.password) {
         let user = await User.findOne(req.body).select("-password");
         if (user) {
-            resp.json(user);
+            resp.send(user);
         } else {
             resp.send("Invalid credentials");
         }
