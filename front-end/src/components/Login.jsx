@@ -2,20 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-    const [email, setemail] = useState('');
-    const [password, setpassword] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const navigate = useNavigate();
+
+    // Use environment variable or fallback to Render API
+    const API_URL = process.env.REACT_APP_API_URL || "https://warehousestore-1.onrender.com";
 
     useEffect(() => {
         const auth = localStorage.getItem('user');
         if (auth) {
-            navigate('./Productslist.jsx');
+            navigate('/products'); // Navigate to products page after login
         }
     }, [navigate]);
 
     const handleLogin = async () => {
         try {
-            let response = await fetch('http://localhost:5000/login', {
+            let response = await fetch(`${API_URL}/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password }),
@@ -28,14 +31,13 @@ const Login = () => {
 
             let data = await response.json();
             localStorage.setItem('user', JSON.stringify(data));
-            navigate('/');
+            alert("Login successful! Redirecting...");
+            navigate('/products'); // Redirect to products page
         } catch (error) {
             console.error('Login failed:', error);
             alert(error.message);
         }
     };
-
-
 
     return (
         <div className="m-30 p-10">
@@ -43,17 +45,15 @@ const Login = () => {
             <input
                 type="email"
                 placeholder="Enter your email"
-                id="email"
                 value={email}
-                onChange={(e) => setemail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
                 className="border-2 border-blue-300 p-1 m-1 block w-72"
             />
             <input
                 type="password"
                 placeholder="Enter your password"
-                id="password"
                 value={password}
-                onChange={(e) => setpassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
                 className="border-2 border-blue-300 p-1 m-1 block w-72"
             />
             <button

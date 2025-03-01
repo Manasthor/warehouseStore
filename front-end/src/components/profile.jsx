@@ -7,6 +7,9 @@ const Profile = () => {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
+    // Fetch API URL from environment variables
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
     useEffect(() => {
         const fetchUserProfile = async () => {
             setLoading(true);
@@ -15,14 +18,14 @@ const Profile = () => {
             try {
                 const storedUser = localStorage.getItem('user');
                 if (!storedUser) {
-                    setError('User not logged in.');
-                    setLoading(false);
+                    navigate('/login');  // Redirect to login if user is not logged in
                     return;
                 }
-                const userData = JSON.parse(storedUser);
-                const userId = userData._id; // Assuming your user object has an _id property
 
-                let response = await fetch(`http://localhost:5000/user/${userId}`, {
+                const userData = JSON.parse(storedUser);
+                const userId = userData._id;
+
+                let response = await fetch(`${API_BASE_URL}/user/${userId}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -30,15 +33,13 @@ const Profile = () => {
                 });
 
                 if (!response.ok) {
-                    if (response.status === 404) {
-                        setError('User not found.');
-                    } else {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                } else {
-                    let result = await response.json();
-                    setUser(result);
+                    let errorData = await response.json();
+                    setError(errorData.message || `Error: ${response.status}`);
+                    return;
                 }
+
+                let result = await response.json();
+                setUser(result);
             } catch (err) {
                 console.error('Error fetching user profile:', err);
                 setError('Failed to fetch user profile. Please try again.');
@@ -48,13 +49,11 @@ const Profile = () => {
         };
 
         fetchUserProfile();
-    }, []);
+    }, [navigate, API_BASE_URL]);
 
     const handleUpdate = () => {
-        const storedUser = localStorage.getItem('user');
-        if(storedUser){
-            const userData = JSON.parse(storedUser);
-            navigate(`/updateuser/${userData._id}`);
+        if (user) {
+            navigate(`/updateuser/${user._id}`);
         }
     };
 
@@ -82,6 +81,13 @@ const Profile = () => {
                 <div className="bg-white p-4 rounded-lg shadow-sm">
                     <p><strong>Name:</strong> {user.name}</p>
                     <p><strong>Email:</strong> {user.email}</p>
+                    {user.phone && <p><strong>Phone:</strong> {user.phone}</p>}
+                    {user.role && <p><strong>Role:</strong> {user.role}</p>}
+                    
+                    {/* Update Profile Button */}
+                    <button onClick={handleUpdate} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">
+                        Update Profile
+                    </button>
                 </div>
             ) : (
                 <p className="text-red-500 text-center">No user found</p>
