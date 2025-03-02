@@ -5,9 +5,7 @@ import User from './DB/User.js';
 import Product from './DB/Product.js';
 import dotenv from 'dotenv';
 import Jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
-// import path from 'path';
-// import { fileURLToPath } from 'url';
+
 dotenv.config();
 const app = express();
 app.use(json());
