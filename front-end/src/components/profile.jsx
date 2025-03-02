@@ -85,9 +85,9 @@ const Profile = () => {
                     {user.role && <p><strong>Role:</strong> {user.role}</p>}
                     
                     {/* Update Profile Button */}
-                    <button onClick={handleUpdate} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">
-                        Update Profile
-                    </button>
+                    {/* <button onClick={handleUpdate} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"> */}
+                        {/* Update Profile */}
+                    {/* </button> */}
                 </div>
             ) : (
                 <p className="text-red-500 text-center">No user found</p>
