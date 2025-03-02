@@ -8,7 +8,7 @@ const Addproduct = () => {
     const [error, seterror] = useState(false);
 
     // Use environment variable or fallback to Render API
-    const API_URL = process.env.REACT_APP_API_URL || "https://warehousestore-1.onrender.com";
+    const API_URL = import.meta.env.REACT_APP_API_URL || "https://warehousestore.onrender.com";
 
     const addproduct = async () => {
         const user = localStorage.getItem('user');

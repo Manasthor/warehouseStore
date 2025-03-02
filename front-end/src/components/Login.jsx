@@ -7,7 +7,7 @@ const Login = () => {
     const navigate = useNavigate();
 
     // Use environment variable or fallback to Render API
-    const API_URL = process.env.REACT_APP_API_URL || "https://warehousestore-1.onrender.com";
+    const API_URL = import.meta.env.REACT_APP_API_URL || "https://warehousestore.onrender.com";
 
     useEffect(() => {
         const auth = localStorage.getItem('user');

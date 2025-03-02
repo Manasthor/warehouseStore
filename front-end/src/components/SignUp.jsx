@@ -10,7 +10,7 @@ const SignUp = () => {
     const navigate = useNavigate();
 
     // Fetch API Base URL from environment variables
-    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    const API_BASE_URL = import.meta.env.REACT_APP_API_URL || "https://warehousestore.onrender.com";
 
     useEffect(() => {
         if (localStorage.getItem('user')) {
