@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Productlist = () => {
     const [product, setProduct] = useState([]);
+    const navigate = useNavigate();
     
     // Use environment variable or fallback to Render API
     const API_URL = import.meta.env.REACT_APP_API_URL || "https://warehousestore.onrender.com";
@@ -28,8 +30,8 @@ const Productlist = () => {
             });
 
             if (result.ok) {
-                alert("Product deleted successfully!");
-                getProduct();
+                // getProduct();
+                navigate('/');
             } else {
                 alert("Failed to delete product.");
             }
@@ -39,7 +41,7 @@ const Productlist = () => {
     };
 
     const searchHandle = async (e) => {
-        let key = e.target.value;
+        let key = e.target.value.toLowerCase();
         if (key) {
             try {
                 let result = await fetch(`${API_URL}/search/${key}`);

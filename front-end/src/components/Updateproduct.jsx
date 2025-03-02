@@ -54,7 +54,6 @@ const Updateproduct = () => {
                 throw new Error('Failed to update product');
             }
 
-            alert('Product updated successfully!');
             navigate('/');
         } catch (error) {
             console.error('Error updating product:', error);

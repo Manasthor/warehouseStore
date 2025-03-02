@@ -41,7 +41,7 @@ const Profile = () => {
                 let result = await response.json();
                 setUser(result);
             } catch (err) {
-                console.error('Error fetching user profile:', err);
+                console.error('Error fetching user profile:');
                 setError('Failed to fetch user profile. Please try again.');
             } finally {
                 setLoading(false);

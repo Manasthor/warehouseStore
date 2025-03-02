@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Addproduct = () => {
     const [name, setname] = useState("");
@@ -6,6 +7,7 @@ const Addproduct = () => {
     const [category, setcategory] = useState("");
     const [company, setcompany] = useState("");
     const [error, seterror] = useState(false);
+    const navigate = useNavigate();
 
     // Use environment variable or fallback to Render API
     const API_URL = import.meta.env.REACT_APP_API_URL || "https://warehousestore.onrender.com";
@@ -48,6 +50,7 @@ const Addproduct = () => {
                 setprice("");
                 setcategory("");
                 setcompany("");
+                navigate('/');
             } else {
                 alert(result.error || "Failed to add product.");
             }
