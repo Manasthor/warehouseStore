@@ -12,7 +12,7 @@ const Login = () => {
     useEffect(() => {
         const auth = localStorage.getItem('user');
         if (auth) {
-            navigate('/products'); // Navigate to products page after login
+            navigate('/'); // Navigate to products page after login
         }
     }, [navigate]);
 
