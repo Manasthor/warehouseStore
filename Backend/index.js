@@ -4,6 +4,8 @@ import Cors from 'cors';
 import User from './DB/User.js';
 import Product from './DB/Product.js';
 import dotenv from 'dotenv';
+import Jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 // import path from 'path';
 // import { fileURLToPath } from 'url';
 dotenv.config();
@@ -15,32 +17,35 @@ app.use(Cors({
     credentials: true,
 }));
 
+const jwtKey = process.env.jwtKey;
+
 app.get("/", (req, res) => {
     res.send("Warehouse Store Backend is running!");
 });
-
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
-
-// app.use(express.static(path.join(__dirname, '../front-end/dist')));
-
-// app.get('*', (req, res) => {
-//     res.sendFile(path.join(__dirname, '../front-end/dist/index.html'));
-// });
 
 app.post('/register', async (req, resp) => {
     let user = new User(req.body);
     let result = await user.save();
     result = result.toObject();
     delete result.password;
-    resp.send(result);
+    Jwt.sign({ result }, jwtKey, (err, token) => {
+        if (err) {
+            return resp.send(err);
+        }
+        resp.send({result, auth: token});
+    });
 });
 
 app.post('/login', async (req, resp) => {
     if (req.body.email && req.body.password) {
         let user = await User.findOne(req.body).select("-password");
         if (user) {
-            resp.send(user);
+            Jwt.sign({ user }, jwtKey, (err, token) => {
+                if (err) {
+                    return resp.send(err);
+                }
+                resp.send({user, auth: token});
+            });
         } else {
             resp.send("Invalid credentials");
         }
@@ -50,13 +55,13 @@ app.post('/login', async (req, resp) => {
     }
 });
 
-app.post('/addProduct', async (req, resp) => {
+app.post('/addProduct',verifyToken, async (req, resp) => {
     let product = new Product(req.body);
     let result = await product.save();
     resp.send(result);
 });
 
-app.get('/products', async (req, res) => {
+app.get('/products',verifyToken, async (req, res) => {
     let products = await Product.find();
     if (products.length > 0) {
         res.send(products);
@@ -65,12 +70,12 @@ app.get('/products', async (req, res) => {
     }
 });
 
-app.delete('/delproduct/:id', async (req, res) => {
+app.delete('/delproduct/:id',verifyToken, async (req, res) => {
     let result = await Product.deleteOne({ _id: req.params.id });
     res.send(result)
 });
 
-app.get('/upproduct/:id', async (req, res) => {
+app.get('/upproduct/:id',verifyToken, async (req, res) => {
     let result = await Product.findOne({ _id: req.params.id });
     if (result) {
         res.send(result);
@@ -79,19 +84,19 @@ app.get('/upproduct/:id', async (req, res) => {
     }
 });
 
-app.put('/inproduct/:id', async (req, res) => {
+app.put('/inproduct/:id',verifyToken, async (req, res) => {
     let result = await Product.updateOne({ _id: req.params.id }, { $set: req.body });
     res.send(result);
 });
 
-app.get('/search/:key', async (req, res) => {
+app.get('/search/:key',verifyToken, async (req, res) => {
     let result = await Product.find(
         {
             "$or": [
-                { name: { $regex: req.params.key, $options : "i" } },
-                { price: { $regex: req.params.key, $options : "i" } },
-                { company: { $regex: req.params.key, $options : "i" } },
-                { category: { $regex: req.params.key, $options : "i" } }
+                { name: { $regex: req.params.key, $options: "i" } },
+                { price: { $regex: req.params.key, $options: "i" } },
+                { company: { $regex: req.params.key, $options: "i" } },
+                { category: { $regex: req.params.key, $options: "i" } }
             ]
         }
     )
@@ -107,8 +112,25 @@ app.get('/user/:userId', async (req, res) => {
     }
 });
 
+function verifyToken(req, res, next) {
+    const bearerHeader = req.headers['authorization'];
+    if (typeof bearerHeader !== 'undefined') {
+        const bearer = bearerHeader.split(' ');
+        const bearerToken = bearer[1];
+        req.token = bearerToken;
+        Jwt.verify(req.token, jwtKey, (err, authData) => {
+            if (err) {
+                res.sendStatus(403);
+            } else {
+                next();
+            }
+        });
+    } else {
+        res.sendStatus(403);
+    }
+}
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
- 
