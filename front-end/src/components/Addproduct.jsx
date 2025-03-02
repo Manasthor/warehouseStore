@@ -45,7 +45,6 @@ const Addproduct = () => {
             let result = await response.json();
 
             if (response.ok) {
-                alert("Product added successfully!");
                 setname("");
                 setprice("");
                 setcategory("");
