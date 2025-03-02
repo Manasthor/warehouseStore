@@ -31,8 +31,7 @@ const Login = () => {
 
             let data = await response.json();
             localStorage.setItem('user', JSON.stringify(data));
-            alert("Login successful! Redirecting...");
-            navigate('/products'); // Redirect to products page
+            navigate('/'); // Redirect to products page
         } catch (error) {
             console.error('Login failed:', error);
             alert(error.message);
