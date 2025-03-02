@@ -7,7 +7,6 @@ const Login = () => {
     const navigate = useNavigate();
 
     const API_URL = import.meta.env.REACT_APP_API_URL || "https://warehousestore.onrender.com";
-    console.warn(API_URL)
 
     useEffect(() => {
         const auth = localStorage.getItem('user');
@@ -33,7 +32,7 @@ const Login = () => {
             console.warn(data)
             if(data.auth){
                 localStorage.setItem('user', JSON.stringify(data.user));
-                localStorage.setItem('token', data.auth);
+                localStorage.setItem('token', JSON.stringify(data.auth));
             }
             
             navigate('/');

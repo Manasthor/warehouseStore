@@ -29,12 +29,10 @@ const Productlist = () => {
 
     const deleteProduct = async (id) => {
         try {
-            const token = localStorage.getItem('token');
-
             let result = await fetch(`${API_URL}/delproduct/${id}`, {
                 method: 'DELETE',
                 headers: {
-                    authorization: `bearer ${token}`
+                    authorization: `bearer ${JSON.parse(localStorage.getItem('token'))}`
                 }
             });
 
