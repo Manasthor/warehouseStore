@@ -15,7 +15,8 @@ app.use(Cors({
     credentials: true,
 }));
 
-const jwtKey = process.env.jwtKey;
+const jwtKey = 'my_secret'
+    ;
 
 app.get("/", (req, res) => {
     res.send("Warehouse Store Backend is running!");
@@ -30,7 +31,7 @@ app.post('/register', async (req, resp) => {
         if (err) {
             return resp.send(err);
         }
-        resp.send({result, auth: token});
+        resp.send({ result, auth: token });
     });
 });
 
@@ -42,7 +43,7 @@ app.post('/login', async (req, resp) => {
                 if (err) {
                     return resp.send(err);
                 }
-                resp.send({user, auth: token});
+                resp.send({ user, auth: token });
             });
         } else {
             resp.send("Invalid credentials");
@@ -53,13 +54,13 @@ app.post('/login', async (req, resp) => {
     }
 });
 
-app.post('/addProduct',verifyToken, async (req, resp) => {
+app.post('/addProduct', verifyToken, async (req, resp) => {
     let product = new Product(req.body);
     let result = await product.save();
     resp.send(result);
 });
 
-app.get('/products',verifyToken, async (req, res) => {
+app.get('/products', verifyToken, async (req, res) => {
     let products = await Product.find();
     if (products.length > 0) {
         res.send(products);
@@ -68,12 +69,12 @@ app.get('/products',verifyToken, async (req, res) => {
     }
 });
 
-app.delete('/delproduct/:id',verifyToken, async (req, res) => {
+app.delete('/delproduct/:id', verifyToken, async (req, res) => {
     let result = await Product.deleteOne({ _id: req.params.id });
     res.send(result)
 });
 
-app.get('/upproduct/:id',verifyToken, async (req, res) => {
+app.get('/upproduct/:id', verifyToken, async (req, res) => {
     let result = await Product.findOne({ _id: req.params.id });
     if (result) {
         res.send(result);
@@ -82,12 +83,12 @@ app.get('/upproduct/:id',verifyToken, async (req, res) => {
     }
 });
 
-app.put('/inproduct/:id',verifyToken, async (req, res) => {
+app.put('/inproduct/:id', verifyToken, async (req, res) => {
     let result = await Product.updateOne({ _id: req.params.id }, { $set: req.body });
     res.send(result);
 });
 
-app.get('/search/:key',verifyToken, async (req, res) => {
+app.get('/search/:key', verifyToken, async (req, res) => {
     let result = await Product.find(
         {
             "$or": [
@@ -118,13 +119,13 @@ function verifyToken(req, res, next) {
         req.token = bearerToken;
         Jwt.verify(req.token, jwtKey, (err, authData) => {
             if (err) {
-                res.sendStatus(403);
+                res.sendStatus(404);
             } else {
                 next();
             }
         });
     } else {
-        res.sendStatus(403);
+        res.sendStatus(401);
     }
 }
 
