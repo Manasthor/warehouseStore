@@ -6,8 +6,8 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-    // Use environment variable or fallback to Render API
     const API_URL = import.meta.env.REACT_APP_API_URL || "https://warehousestore.onrender.com";
+    console.warn(API_URL)
 
     useEffect(() => {
         const auth = localStorage.getItem('user');
@@ -18,20 +18,25 @@ const Login = () => {
 
     const handleLogin = async () => {
         try {
-            let response = await fetch(`${API_URL}/login`, {
+            let result = await fetch(`${API_URL}/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password }),
             });
 
-            if (!response.ok) {
-                let errorData = await response.json();
+            if (!result.ok) {
+                let errorData = await result.json();
                 throw new Error(errorData.error || 'Login failed');
             }
 
-            let data = await response.json();
-            localStorage.setItem('user', JSON.stringify(data));
-            navigate('/'); // Redirect to products page
+            let data = await result.json();
+            console.warn(data)
+            if(data.auth){
+                localStorage.setItem('user', JSON.stringify(data.user));
+                localStorage.setItem('token', data.auth);
+            }
+            
+            navigate('/');
         } catch (error) {
             console.error('Login failed:', error);
             alert(error.message);

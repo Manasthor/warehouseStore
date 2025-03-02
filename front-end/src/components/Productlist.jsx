@@ -7,7 +7,7 @@ const Productlist = () => {
     const navigate = useNavigate();
     
     // Use environment variable or fallback to Render API
-    const API_URL = import.meta.env.REACT_APP_API_URL || "https://warehousestore.onrender.com";
+    const API_URL = import.meta.env.REACT_APP_API_URL || "https://warehousestore.onrender.com";;
 
     useEffect(() => {
         getProduct();
@@ -15,7 +15,11 @@ const Productlist = () => {
 
     const getProduct = async () => {
         try {
-            let result = await fetch(`${API_URL}/products`);
+            let result = await fetch(`${API_URL}/products`,{
+                headers: {
+                    authorization: `bearer ${JSON.parse(localStorage.getItem('token'))}`
+                }
+            });
             let ans = await result.json();
             setProduct(ans);
         } catch (error) {
@@ -27,6 +31,9 @@ const Productlist = () => {
         try {
             let result = await fetch(`${API_URL}/delproduct/${id}`, {
                 method: 'DELETE',
+                headers: {
+                    authorization: `bearer ${JSON.parse(localStorage.getItem('token'))}`
+                }
             });
 
             if (result.ok) {
@@ -44,7 +51,11 @@ const Productlist = () => {
         let key = e.target.value.toLowerCase();
         if (key) {
             try {
-                let result = await fetch(`${API_URL}/search/${key}`);
+                let result = await fetch(`${API_URL}/search/${key}`,{
+                    headers: {
+                        authorization: `bearer ${JSON.parse(localStorage.getItem('token'))}`
+                    }
+                });
                 let ans = await result.json();
                 setProduct(ans);
             } catch (error) {

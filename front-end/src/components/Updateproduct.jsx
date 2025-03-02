@@ -20,7 +20,11 @@ const Updateproduct = () => {
 
     const getProductById = async () => {
         try {
-            let response = await fetch(`${API_BASE_URL}/upproduct/${id}`);
+            let response = await fetch(`${API_BASE_URL}/upproduct/${id}`,{
+                headers: {
+                    authorization: `bearer ${JSON.parse(localStorage.getItem('token'))}`
+                }
+            });
             if (!response.ok) throw new Error('Product not found');
             
             let result = await response.json();
@@ -47,6 +51,7 @@ const Updateproduct = () => {
                 body: JSON.stringify({ name, price, category, company }),
                 headers: {
                     'Content-Type': 'application/json',
+                    authorization: `bearer ${JSON.parse(localStorage.getItem('token'))}`
                 },
             });
 
