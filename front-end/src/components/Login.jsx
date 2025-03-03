@@ -32,9 +32,9 @@ const Login = () => {
             console.warn(data)
             if(data.auth){
                 localStorage.setItem('user', JSON.stringify(data.user));
-                localStorage.setItem('token', JSON.stringify(data.auth));
+                localStorage.setItem('token', (data.auth));
             }
-            
+
             navigate('/');
         } catch (error) {
             console.error('Login failed:', error);
