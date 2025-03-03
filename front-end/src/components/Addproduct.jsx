@@ -52,7 +52,7 @@ const Addproduct = () => {
                 setcompany("");
                 navigate('/');
             } else {
-                alert(result.error || "Failed to add product.");
+                console.log(result.error || "Failed to add product.");
             }
         } catch (error) {
             console.error("Error adding product:", error);
