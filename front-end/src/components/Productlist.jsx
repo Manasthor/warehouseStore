@@ -79,7 +79,7 @@ const Productlist = () => {
                 />
             </div>
             <div className="max-h-[500px] overflow-y-auto">
-                <ul className="flex justify-around items-center p-2 border border-blue-400 bg-blue-100 rounded-xl shadow-sm text-sm font-medium text-gray-700 tracking-wide w-full max-w-full mx-auto sticky top-0 z-10 bg-blue-200">
+                <ul className="flex justify-around items-center p-2 border border-blue-400 bg-blue-200 rounded-xl shadow-sm text-sm font-medium text-gray-700 tracking-wide w-full max-w-full mx-auto sticky top-0 z-10">
                     <li className="px-2 py-2 text-center flex-1 border-r border-gray-300 font-extrabold">S No.</li>
                     <li className="px-2 py-2 text-center flex-1 border-r border-gray-300 font-extrabold">Name</li>
                     <li className="px-2 py-2 text-center flex-1 border-r border-gray-300 font-extrabold">Price</li>
