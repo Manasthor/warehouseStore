@@ -26,7 +26,7 @@ app.post('/register', async (req, resp) => {
     let result = await user.save();
     result = result.toObject();
     delete result.password;
-    Jwt.sign({ result },jwtKey, (err, token) => {
+    Jwt.sign({ result },jwtKey,{algorithm: "HS256"}, (err, token) => {
         if (err) {
             return resp.send(err);
         }
@@ -38,7 +38,7 @@ app.post('/login', async (req, resp) => {
     if (req.body.email && req.body.password) {
         let user = await User.findOne(req.body).select("-password");
         if (user) {
-            Jwt.sign({ user },jwtKey, { expiresIn: '2h' }, (err, token) => {
+            Jwt.sign({ user },jwtKey, { expiresIn: '2h',algorithm: "HS256" }, (err, token) => {
                 if (err) {
                     return resp.send(err);
                 }
