@@ -101,7 +101,7 @@ app.get('/search/:key',verifyToken, async (req, res) => {
     res.send(result);
 });
 
-app.get('/user/:userId', async (req, res) => {
+app.get('/user/:userId',verifyToken, async (req, res) => {
     const user = await User.findById(req.params.userId).select("name email");
     if (!user) {
         res.status(404).json({ message: "No user found" });
