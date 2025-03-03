@@ -116,7 +116,7 @@ function verifyToken(req, res, next) {
         const bearer = bearerHeader.split(' ');
         const bearerToken = bearer[1];
         req.token = bearerToken;
-        Jwt.verify(req.token,{ expiresIn: '2h' }, jwtKey, (err, authData) => {
+        Jwt.verify(req.token, jwtKey, (err, authData) => {
             if (err) {
                 res.sendStatus(403);
             } else {
