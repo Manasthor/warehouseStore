@@ -34,7 +34,7 @@ const Productlist = () => {
             let result = await fetch(`${API_URL}/delproduct/${id}`, {
                 method: 'DELETE',
                 headers: {
-                    authorization: `bearer ${JSON.parse(localStorage.getItem('token'))}`
+                    authorization: `bearer ${JSON.parse(sessionStorage.getItem('token'))}`
                 }
             });
 

@@ -51,12 +51,6 @@ const Profile = () => {
         fetchUserProfile();
     }, [navigate, API_BASE_URL]);
 
-    const handleUpdate = () => {
-        if (user) {
-            navigate(`/updateuser/${user._id}`);
-        }
-    };
-
     if (loading) {
         return (
             <div className="max-w-3xl mx-auto p-6 bg-gray-100 rounded-lg shadow-md">

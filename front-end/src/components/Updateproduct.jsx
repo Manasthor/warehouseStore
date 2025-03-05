@@ -22,7 +22,7 @@ const Updateproduct = () => {
         try {
             let response = await fetch(`${API_BASE_URL}/upproduct/${id}`,{
                 headers: {
-                    authorization: `bearer ${JSON.parse(localStorage.getItem('token'))}`
+                    authorization: `bearer ${JSON.parse(sessionStorage.getItem('token'))}`
                 }
             });
             if (!response.ok) throw new Error('Product not found');
