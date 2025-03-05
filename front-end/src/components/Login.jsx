@@ -31,8 +31,8 @@ const Login = () => {
             let data = await result.json();
             console.warn(data)
             if(data.auth){
-                localStorage.setItem('user', JSON.stringify(data.user));
-                localStorage.setItem('token', data.auth);
+                sessionStorage.setItem('user', JSON.stringify(data.user));
+                sessionStorage.setItem('token', data.auth);
             }
 
             navigate('/');
