@@ -110,19 +110,18 @@ app.get('/user/:userId',verifyToken, async (req, res) => {
     }
 });
 
-function verifyToken(req, res, next) {
+async function verifyToken(req, res, next) {
     const bearerHeader = req.headers['authorization'];
     if (typeof bearerHeader !== 'undefined') {
         const bearer = bearerHeader.split(' ');
         const bearerToken = bearer[1];
-        req.token = bearerToken;
-        Jwt.verify(req.token, jwtKey, (err, authData) => {
-            if (err) {
-                res.sendStatus(403);
-            } else {
-                next();
-            }
-        });
+        try {
+            const authData = await Jwt.verify(bearerToken, jwtKey);
+            req.user = authData; // Assuming authData contains user information
+            next();
+        } catch (err) {
+            res.sendStatus(403);
+        }
     } else {
         res.sendStatus(403);
     }
