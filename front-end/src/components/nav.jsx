@@ -7,7 +7,7 @@ const Nav = () => {
     const navigate = useNavigate()
     const logout = () => {
         localStorage.clear()
-        navigate('/signup')
+        navigate('/Login')
     }
     return (
         <div className="navbar bg-blue-200 p-4 flex justify-between items-center">

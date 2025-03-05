@@ -18,11 +18,11 @@ function App() {
       <Routes>
 
         <Route element={<PrivateRoutes />}>
-        <Route path="/" element={<Productlist />} />
-        <Route path="/AddProduct" element={<Addproduct />} />
-        <Route path="/update/:id" element={<Updateproduct />} />
-        <Route path="/logout" element={<h1>Logout</h1>} />
-        <Route path="/profile" element={<Profile/>} />
+          <Route path="/" element={<Productlist />} />
+          <Route path="/Addproduct" element={<Addproduct />} />
+          <Route path="/update/:id" element={<Updateproduct />} />
+          <Route path="/logout" element={<h1>Logout</h1>} />
+          <Route path="/profile" element={<Profile />} />
         </Route>
 
         <Route path="/signup" element={<SignUp />} />

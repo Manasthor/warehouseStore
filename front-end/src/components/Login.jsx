@@ -32,7 +32,7 @@ const Login = () => {
             console.warn(data)
             if(data.auth){
                 localStorage.setItem('user', JSON.stringify(data.user));
-                localStorage.setItem('token', (data.auth));
+                localStorage.setItem('token', data.auth);
             }
 
             navigate('/');
