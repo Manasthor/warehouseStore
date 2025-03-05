@@ -4,41 +4,41 @@ import { useNavigate } from 'react-router-dom';
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    
     const navigate = useNavigate();
-
-    const API_URL = import.meta.env.REACT_APP_API_URL || "https://warehousestore.onrender.com";
+    const API_URL = import.meta.env.VITE_API_URL || "https://warehousestore.onrender.com";
 
     useEffect(() => {
-        const auth = localStorage.getItem('user');
-        if (auth) {
-            navigate('/'); // Navigate to products page after login
+        if (localStorage.getItem('user')) {
+            navigate('/');
         }
     }, [navigate]);
 
     const handleLogin = async () => {
+        setLoading(true);
+        setError(null);
+        
         try {
-            let result = await fetch(`${API_URL}/login`, {
+            const response = await fetch(`${API_URL}/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password }),
             });
 
-            if (!result.ok) {
-                let errorData = await result.json();
-                throw new Error(errorData.error || 'Login failed');
+            const data = await response.json();
+            if (!response.ok || !data.auth) {
+                throw new Error(data.error || "Invalid email or password");
             }
 
-            let data = await result.json();
-            console.warn(data)
-            if(data.auth){
-                sessionStorage.setItem('user', JSON.stringify(data.user));
-                sessionStorage.setItem('token', data.auth);
-            }
-
+            localStorage.setItem('user', JSON.stringify(data.user));
             navigate('/');
+            window.location.reload(); // Ensure page updates after login
         } catch (error) {
-            console.error('Login failed:', error);
-            alert(error.message);
+            setError(error.message);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -59,11 +59,15 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 className="border-2 border-blue-300 p-1 m-1 block w-72"
             />
+            
+            {error && <p className="text-red-500">{error}</p>}
+
             <button
                 onClick={handleLogin}
-                className="bg-pink-100 p-1 m-1 border-1 pointer-events-auto"
+                className={`bg-pink-100 p-1 m-1 border-1 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                disabled={loading}
             >
-                Login
+                {loading ? 'Logging in...' : 'Login'}
             </button>
         </div>
     );

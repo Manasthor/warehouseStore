@@ -10,7 +10,7 @@ const Addproduct = () => {
     const navigate = useNavigate();
 
     // Use environment variable or fallback to Render API
-    const API_URL = import.meta.env.REACT_APP_API_URL || "https://warehousestore.onrender.com";
+    const API_URL = import.meta.env.VITE_API_URL || "https://warehousestore.onrender.com";
 
     const addproduct = async () => {
         const user = localStorage.getItem('user');
@@ -32,7 +32,7 @@ const Addproduct = () => {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
-                    authorization: `bearer ${JSON.parse(sessionStorage.getItem('token'))}`
+                    authorization: `bearer ${JSON.parse(localStorage.getItem('token'))}`
                 },
                 body: JSON.stringify({
                     name,

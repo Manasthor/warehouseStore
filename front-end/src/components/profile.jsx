@@ -7,28 +7,31 @@ const Profile = () => {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
-    // Fetch API URL from environment variables
-    const API_BASE_URL = import.meta.env.REACT_APP_API_URL || "https://warehousestore.onrender.com";
+    // Fetch API Base URL from environment variables
+    const API_BASE_URL = import.meta.env.VITE_API_URL || "https://warehousestore.onrender.com";
 
     useEffect(() => {
         const fetchUserProfile = async () => {
             setLoading(true);
             setError(null);
 
+            const storedUser = localStorage.getItem('user');
+            const token = localStorage.getItem('token');
+
+            if (!storedUser || !token) {
+                navigate('/login'); // Redirect to login if user is not logged in
+                return;
+            }
+
+            const userData = JSON.parse(storedUser);
+            const userId = userData._id;
+
             try {
-                const storedUser = localStorage.getItem('user');
-                if (!storedUser) {
-                    navigate('/login');  // Redirect to login if user is not logged in
-                    return;
-                }
-
-                const userData = JSON.parse(storedUser);
-                const userId = userData._id;
-
                 let response = await fetch(`${API_BASE_URL}/user/${userId}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
                     },
                 });
 
@@ -41,7 +44,7 @@ const Profile = () => {
                 let result = await response.json();
                 setUser(result);
             } catch (err) {
-                console.error('Error fetching user profile:');
+                console.error('Error fetching user profile:', err);
                 setError('Failed to fetch user profile. Please try again.');
             } finally {
                 setLoading(false);
@@ -77,11 +80,17 @@ const Profile = () => {
                     <p><strong>Email:</strong> {user.email}</p>
                     {user.phone && <p><strong>Phone:</strong> {user.phone}</p>}
                     {user.role && <p><strong>Role:</strong> {user.role}</p>}
-                    
-                    {/* Update Profile Button */}
-                    {/* <button onClick={handleUpdate} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"> */}
-                        {/* Update Profile */}
-                    {/* </button> */}
+
+                    {/* Logout Button */}
+                    <button 
+                        onClick={() => {
+                            localStorage.removeItem('user');
+                            localStorage.removeItem('token');
+                            navigate('/login');
+                        }} 
+                        className="mt-4 px-4 py-2 bg-red-500 text-white rounded">
+                        Logout
+                    </button>
                 </div>
             ) : (
                 <p className="text-red-500 text-center">No user found</p>

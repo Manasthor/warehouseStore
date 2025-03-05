@@ -7,10 +7,9 @@ const SignUp = () => {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    
     const navigate = useNavigate();
-
-    // Fetch API Base URL from environment variables
-    const API_BASE_URL = import.meta.env.REACT_APP_API_URL || "https://warehousestore.onrender.com";;
+    const API_BASE_URL = import.meta.env.VITE_API_URL || "https://warehousestore.onrender.com";
 
     useEffect(() => {
         if (localStorage.getItem('user')) {
@@ -19,31 +18,40 @@ const SignUp = () => {
     }, [navigate]);
 
     const handleRegister = async () => {
+        // Basic form validation
+        if (!name || !email || !password) {
+            setError("All fields are required!");
+            return;
+        }
+
+        if (!/\S+@\S+\.\S+/.test(email)) {
+            setError("Enter a valid email address!");
+            return;
+        }
+
         setLoading(true);
         setError(null);
 
         try {
-            let response = await fetch(`${API_BASE_URL}/register`, {
+            const response = await fetch(`${API_BASE_URL}/register`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name, email, password }),
             });
 
-            let result = await response.json();
+            const result = await response.json();
 
             if (!response.ok) {
-                throw new Error(result.message || 'Registration failed');
+                throw new Error(result.message || "Registration failed");
             }
 
-            
-            if(result.auth){
-                sessionStorage.setItem('user', JSON.stringify(result.result));
-                sessionStorage.setItem('token', result.auth);
+            if (result.auth) {
+                localStorage.setItem('user', JSON.stringify(result.result));
+                localStorage.setItem('authToken', result.auth); // Store JWT
             }
 
             navigate('/');
+            window.location.reload(); // Ensure session updates
         } catch (err) {
             setError(err.message);
         } finally {
@@ -78,9 +86,10 @@ const SignUp = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 className="border-2 border-blue-300 p-2 m-1 block w-72 rounded"
             />
+
             <button
                 onClick={handleRegister}
-                className={`bg-pink-500 text-white p-2 mt-2 w-72 rounded ${loading ? 'opacity-50' : ''}`}
+                className={`bg-pink-500 text-white p-2 mt-2 w-72 rounded ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                 disabled={loading}
             >
                 {loading ? 'Registering...' : 'Register'}

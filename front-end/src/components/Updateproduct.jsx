@@ -11,8 +11,7 @@ const Updateproduct = () => {
     const navigate = useNavigate();
     const { id } = useParams();
 
-    // Fetch API Base URL from environment variables
-    const API_BASE_URL = import.meta.env.REACT_APP_API_URL || "https://warehousestore.onrender.com";
+    const API_BASE_URL = import.meta.env.VITE_API_URL || "https://warehousestore.onrender.com";
 
     useEffect(() => {
         getProductById();
@@ -20,13 +19,13 @@ const Updateproduct = () => {
 
     const getProductById = async () => {
         try {
-            let response = await fetch(`${API_BASE_URL}/upproduct/${id}`,{
+            let response = await fetch(`${API_BASE_URL}/products/${id}`, {
                 headers: {
-                    authorization: `bearer ${JSON.parse(sessionStorage.getItem('token'))}`
+                    'Authorization': `Bearer ${JSON.parse(localStorage.getItem('token'))}`
                 }
             });
             if (!response.ok) throw new Error('Product not found');
-            
+
             let result = await response.json();
             setName(result.name);
             setPrice(result.price);
@@ -45,13 +44,18 @@ const Updateproduct = () => {
             return;
         }
 
+        if (isNaN(price) || price <= 0) {
+            alert('Please enter a valid price');
+            return;
+        }
+
         try {
-            let response = await fetch(`${API_BASE_URL}/inproduct/${id}`, {
+            let response = await fetch(`${API_BASE_URL}/products/${id}`, {
                 method: 'PUT',
                 body: JSON.stringify({ name, price, category, company }),
                 headers: {
                     'Content-Type': 'application/json',
-                    authorization: `bearer ${JSON.parse(localStorage.getItem('token'))}`
+                    'Authorization': `Bearer ${JSON.parse(localStorage.getItem('token'))}`
                 },
             });
 
@@ -59,6 +63,7 @@ const Updateproduct = () => {
                 throw new Error('Failed to update product');
             }
 
+            alert('Product updated successfully!');
             navigate('/');
         } catch (error) {
             console.error('Error updating product:', error);
