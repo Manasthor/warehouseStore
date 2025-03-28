@@ -7,7 +7,7 @@ const SignUp = () => {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    
+
     const navigate = useNavigate();
     const API_BASE_URL = import.meta.env.VITE_API_URL || "https://warehousestore.onrender.com";
 
@@ -33,7 +33,7 @@ const SignUp = () => {
         setError(null);
 
         try {
-            const response = await fetch(`${API_BASE_URL}/register`, {
+            const response = await fetch(`${API_URL}/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name, email, password }),
@@ -45,9 +45,8 @@ const SignUp = () => {
                 throw new Error(result.message || "Registration failed");
             }
 
-            if (result.auth) {
-                localStorage.setItem('user', JSON.stringify(result.result));
-                localStorage.setItem('authToken', result.auth); // Store JWT
+            if (result.user) {
+                localStorage.setItem('user', JSON.stringify(result.user));
             }
 
             navigate('/');

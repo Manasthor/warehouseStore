@@ -16,9 +16,8 @@ const Profile = () => {
             setError(null);
 
             const storedUser = localStorage.getItem('user');
-            const token = localStorage.getItem('token');
 
-            if (!storedUser || !token) {
+            if (!storedUser) {
                 navigate('/login'); // Redirect to login if user is not logged in
                 return;
             }
@@ -27,11 +26,10 @@ const Profile = () => {
             const userId = userData._id;
 
             try {
-                let response = await fetch(`${API_BASE_URL}/user/${userId}`, {
+                let response = await fetch(`${API_URL}/user/${userId}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`,
                     },
                 });
 
@@ -85,7 +83,6 @@ const Profile = () => {
                     <button 
                         onClick={() => {
                             localStorage.removeItem('user');
-                            localStorage.removeItem('token');
                             navigate('/login');
                         }} 
                         className="mt-4 px-4 py-2 bg-red-500 text-white rounded">

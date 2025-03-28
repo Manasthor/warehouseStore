@@ -6,20 +6,21 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    
+
     const navigate = useNavigate();
     const API_URL = import.meta.env.VITE_API_URL || "https://warehousestore.onrender.com";
 
     useEffect(() => {
-        if (localStorage.getItem('user')) {
-            navigate('/');
+        const user = localStorage.getItem('user');
+        if (user) {
+            navigate('/'); // Redirect to homepage if already logged in
         }
-    }, [navigate]);
+    }, []);
 
     const handleLogin = async () => {
         setLoading(true);
         setError(null);
-        
+
         try {
             const response = await fetch(`${API_URL}/login`, {
                 method: 'POST',
@@ -28,13 +29,15 @@ const Login = () => {
             });
 
             const data = await response.json();
-            if (!response.ok || !data.auth) {
+            if (!response.ok || !data.user) {
                 throw new Error(data.error || "Invalid email or password");
             }
 
+            // Store user details
             localStorage.setItem('user', JSON.stringify(data.user));
-            navigate('/');
-            window.location.reload(); // Ensure page updates after login
+
+            navigate('/'); // Redirect to homepage
+            window.location.reload(); // Refresh to reflect login status
         } catch (error) {
             setError(error.message);
         } finally {
@@ -59,7 +62,7 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 className="border-2 border-blue-300 p-1 m-1 block w-72"
             />
-            
+
             {error && <p className="text-red-500">{error}</p>}
 
             <button

@@ -6,6 +6,7 @@ const Addproduct = () => {
     const [price, setprice] = useState("");
     const [category, setcategory] = useState("");
     const [company, setcompany] = useState("");
+    const [quantity, setquantity] = useState("");
     const [error, seterror] = useState(false);
     const navigate = useNavigate();
 
@@ -22,7 +23,7 @@ const Addproduct = () => {
         const userId = JSON.parse(user)._id;
 
         // Validate inputs
-        if (!userId || !name || !price || !category || !company) {
+        if (!userId || !name || !price || !category || !company || !quantity) {
             seterror(true);
             return;
         }
@@ -32,14 +33,14 @@ const Addproduct = () => {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
-                    authorization: `bearer ${JSON.parse(localStorage.getItem('token'))}`
                 },
                 body: JSON.stringify({
                     name,
                     price,
                     category,
                     userId,
-                    company
+                    company,
+                    quantity
                 })
             });
 
@@ -50,6 +51,7 @@ const Addproduct = () => {
                 setprice("");
                 setcategory("");
                 setcompany("");
+                setquantity("");
                 navigate('/');
             } else {
                 console.log(result.error || "Failed to add product.");
@@ -76,6 +78,9 @@ const Addproduct = () => {
 
                     <input type="text" placeholder="Enter product Company" value={company} onChange={(e) => setcompany(e.target.value)} className="border-2 border-blue-300 p-1 m-1 block w-72" />
                     {error && !company && <span className="text-red-500 p-1">Enter Valid Company</span>}
+
+                    <input type="text" placeholder="Enter product Quantity" value={quantity} onChange={(e) => setquantity(e.target.value)} className="border-2 border-blue-300 p-1 m-1 block w-72" />
+                    {error && !quantity && <span className="text-red-500 p-1">Enter Valid Quantity</span>}
 
                     <button onClick={addproduct} className="bg-pink-100 p-1 m-1 border-1 pointer-events-auto">Add Product</button>
                 </div>

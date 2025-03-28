@@ -8,10 +8,10 @@ const Productlist = () => {
     const navigate = useNavigate();
 
     const API_URL = import.meta.env.VITE_API_URL || "https://warehousestore.onrender.com";
-    const token = JSON.parse(localStorage.getItem('token'));
+    const user = JSON.parse(localStorage.getItem('user'));
 
     useEffect(() => {
-        if (!token) {
+        if (!user) {
             navigate('/login');
         } else {
             getProduct();
@@ -24,14 +24,10 @@ const Productlist = () => {
 
         try {
             const response = await fetch(`${API_URL}/products`, {
-                headers: { authorization: `Bearer ${token}` },
+                headers: { 'Content-Type': 'application/json' },
             });
 
             if (!response.ok) {
-                if (response.status === 401) {
-                    localStorage.removeItem('token');
-                    navigate('/login');
-                }
                 throw new Error("Failed to fetch products");
             }
 
@@ -51,7 +47,7 @@ const Productlist = () => {
         try {
             const response = await fetch(`${API_URL}/delproduct/${id}`, {
                 method: 'DELETE',
-                headers: { authorization: `Bearer ${token}` },
+                headers: { 'Content-Type': 'application/json' },
             });
 
             if (!response.ok) {
@@ -70,7 +66,7 @@ const Productlist = () => {
 
         try {
             const response = await fetch(`${API_URL}/search/${key}`, {
-                headers: { authorization: `Bearer ${token}` },
+                headers: { 'Content-Type': 'application/json' },
             });
 
             if (!response.ok) {
@@ -108,6 +104,7 @@ const Productlist = () => {
                         <li className="px-2 py-2 text-center flex-1 border-r border-gray-300 font-extrabold">Price</li>
                         <li className="px-2 py-2 text-center flex-1 border-r border-gray-300 font-extrabold">Category</li>
                         <li className="px-2 py-2 text-center flex-1 border-r border-gray-300 font-extrabold">Company</li>
+                        <li className="px-2 py-2 text-center flex-1 border-r border-gray-300 font-extrabold">Quantity</li>
                         <li className="px-2 py-2 text-center flex-1 font-extrabold">Action</li>
                     </ul>
 
@@ -118,9 +115,10 @@ const Productlist = () => {
                         >
                             <li className="px-2 py-2 text-center flex-1 border-r border-gray-300 font-bold">{index + 1}</li>
                             <li className="px-2 py-2 text-center flex-1 border-r border-gray-300">{item.name}</li>
-                            <li className="px-2 py-2 text-center flex-1 border-r border-gray-300">${item.price}</li>
+                            <li className="px-2 py-2 text-center flex-1 border-r border-gray-300">₹{item.price}</li>
                             <li className="px-2 py-2 text-center flex-1 border-r border-gray-300">{item.category}</li>
                             <li className="px-2 py-2 text-center flex-1 border-r border-gray-300">{item.company}</li>
+                            <li className="px-2 py-2 text-center flex-1 border-r border-gray-300">{item.quantity}</li>
                             <li className="px-2 py-2 text-center flex-1">
                                 <button
                                     className="hover:cursor-pointer text-red-500"

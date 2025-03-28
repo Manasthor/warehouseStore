@@ -6,6 +6,7 @@ const Updateproduct = () => {
     const [price, setPrice] = useState('');
     const [category, setCategory] = useState('');
     const [company, setCompany] = useState('');
+    const [quantity, setQuantity] = useState('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
@@ -19,11 +20,7 @@ const Updateproduct = () => {
 
     const getProductById = async () => {
         try {
-            let response = await fetch(`${API_BASE_URL}/products/${id}`, {
-                headers: {
-                    'Authorization': `Bearer ${JSON.parse(localStorage.getItem('token'))}`
-                }
-            });
+            let response = await fetch(`${API_URL}/products/${id}`);
             if (!response.ok) throw new Error('Product not found');
 
             let result = await response.json();
@@ -31,6 +28,7 @@ const Updateproduct = () => {
             setPrice(result.price);
             setCategory(result.category);
             setCompany(result.company);
+            setQuantity(result.quantity);
         } catch (err) {
             setError(err.message);
         } finally {
@@ -39,7 +37,7 @@ const Updateproduct = () => {
     };
 
     const updateProduct = async () => {
-        if (!name || !price || !category || !company) {
+        if (!name || !price || !category || !company || !quantity) {
             alert('All fields are required!');
             return;
         }
@@ -50,12 +48,11 @@ const Updateproduct = () => {
         }
 
         try {
-            let response = await fetch(`${API_BASE_URL}/products/${id}`, {
+            let response = await fetch(`${API_URL}/products/${id}`, {
                 method: 'PUT',
-                body: JSON.stringify({ name, price, category, company }),
+                body: JSON.stringify({ name, price, category, company, quantity }),
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${JSON.parse(localStorage.getItem('token'))}`
                 },
             });
 
@@ -83,6 +80,7 @@ const Updateproduct = () => {
                     <input type="text" placeholder="Enter product price" value={price} onChange={(e) => setPrice(e.target.value)} className="border-2 border-blue-300 p-1 m-1 block w-72" />
                     <input type="text" placeholder="Enter product Category" value={category} onChange={(e) => setCategory(e.target.value)} className="border-2 border-blue-300 p-1 m-1 block w-72" />
                     <input type="text" placeholder="Enter product Company" value={company} onChange={(e) => setCompany(e.target.value)} className="border-2 border-blue-300 p-1 m-1 block w-72" />
+                    <input type="text" placeholder="Enter product Quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} className="border-2 border-blue-300 p-1 m-1 block w-72" />
                     <button onClick={updateProduct} className="bg-pink-500 text-white p-2 m-1 border-1 rounded">
                         Update Product
                     </button>
