@@ -8,7 +8,7 @@ const Profile = () => {
     const navigate = useNavigate();
 
     // Fetch API Base URL from environment variables
-    const API_BASE_URL = import.meta.env.VITE_API_URL || "https://warehousestore.onrender.com";
+    const API_URL = import.meta.env.VITE_API_URL || "https://warehousestore.onrender.com";
 
     useEffect(() => {
         const fetchUserProfile = async () => {
@@ -26,7 +26,7 @@ const Profile = () => {
             const userId = userData._id;
 
             try {
-                let response = await fetch(`${API_BASE_URL}/user/${userId}`, {
+                let response = await fetch(`${API_URL}/user/${userId}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

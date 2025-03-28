@@ -12,7 +12,7 @@ const Updateproduct = () => {
     const navigate = useNavigate();
     const { id } = useParams();
 
-    const API_BASE_URL = import.meta.env.VITE_API_URL || "https://warehousestore.onrender.com";
+    const API_URL = import.meta.env.VITE_API_URL || "https://warehousestore.onrender.com";
 
     useEffect(() => {
         getProductById();

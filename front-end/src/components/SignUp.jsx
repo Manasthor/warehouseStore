@@ -9,7 +9,7 @@ const SignUp = () => {
     const [error, setError] = useState(null);
 
     const navigate = useNavigate();
-    const API_BASE_URL = import.meta.env.VITE_API_URL || "https://warehousestore.onrender.com";
+    const API_URL = import.meta.env.VITE_API_URL || "https://warehousestore.onrender.com";
 
     useEffect(() => {
         if (localStorage.getItem('user')) {
