@@ -50,7 +50,7 @@ const Profile = () => {
         };
 
         fetchUserProfile();
-    }, [navigate, API_BASE_URL]);
+    }, [navigate, API_URL]);
 
     if (loading) {
         return (
