@@ -73,16 +73,31 @@ const Updateproduct = () => {
 
     return (
         <div>
-            <h1 className="text-center">Update Product</h1>
+            <h1 className="text-center">Edit Product</h1>
             <div className="flex justify-center items-center p-20">
                 <div>
-                    <input type="text" placeholder="Enter product name" value={name} onChange={(e) => setName(e.target.value)} className="border-2 border-blue-300 p-1 m-1 block w-72" />
-                    <input type="text" placeholder="Enter product price" value={price} onChange={(e) => setPrice(e.target.value)} className="border-2 border-blue-300 p-1 m-1 block w-72" />
-                    <input type="text" placeholder="Enter product Category" value={category} onChange={(e) => setCategory(e.target.value)} className="border-2 border-blue-300 p-1 m-1 block w-72" />
-                    <input type="text" placeholder="Enter product Company" value={company} onChange={(e) => setCompany(e.target.value)} className="border-2 border-blue-300 p-1 m-1 block w-72" />
-                    <input type="text" placeholder="Enter product Quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} className="border-2 border-blue-300 p-1 m-1 block w-72" />
-                    <button onClick={updateProduct} className="bg-pink-500 text-white p-2 m-1 border-1 rounded">
-                        Update Product
+                    <div className="flex items-center mb-2">
+                        <label className="w-32 text-sm font-medium text-gray-700 mr-2">Product Name</label>
+                        <input type="text" placeholder="Enter product name" value={name} onChange={(e) => setName(e.target.value)} className="border-2 border-blue-300 p-1 w-60" />
+                    </div>
+
+                    <div className="flex items-center mb-2">
+                        <label className="w-32 text-sm font-medium text-gray-700 mr-2">Product Price</label>
+                        <input type="text" placeholder="Enter product price" value={price} onChange={(e) => setPrice(e.target.value)} className="border-2 border-blue-300 p-1 w-60" />
+                    </div>
+
+                    <div className="flex items-center mb-2">
+                        <label className="w-32 text-sm font-medium text-gray-700 mr-2">Product Category</label>
+                        <input type="text" placeholder="Enter product Category" value={category} onChange={(e) => setCategory(e.target.value)} className="border-2 border-blue-300 p-1 w-60" />
+                    </div>
+
+                    <div className="flex items-center mb-2">
+                        <label className="w-32 text-sm font-medium text-gray-700 mr-2">Product Company</label>
+                        <input type="text" placeholder="Enter product Company" value={company} onChange={(e) => setCompany(e.target.value)} className="border-2 border-blue-300 p-1 w-60" />
+                    </div>
+
+                    <button onClick={updateProduct} className="bg-pink-500 text-white p-2 mt-4 border-1 rounded w-full">
+                        Edit Product
                     </button>
                 </div>
             </div>

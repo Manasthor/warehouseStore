@@ -10,6 +10,7 @@ import Addproduct from './components/Addproduct'
 import Productlist from './components/Productlist'
 import Updateproduct from './components/Updateproduct'
 import Profile from './components/profile'
+import Edit from './components/Edit'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/" element={<Productlist />} />
           <Route path="/Addproduct" element={<Addproduct />} />
           <Route path="/update/:id" element={<Updateproduct />} />
+          <Route path="/edit/:id" element={<Edit />} />
           <Route path="/logout" element={<h1>Logout</h1>} />
           <Route path="/profile" element={<Profile />} />
         </Route>

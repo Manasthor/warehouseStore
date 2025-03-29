@@ -121,13 +121,16 @@ const Productlist = () => {
                             <li className="px-2 py-2 text-center flex-1 border-r border-gray-300">{item.quantity}</li>
                             <li className="px-2 py-2 text-center flex-1">
                                 <button
-                                    className="hover:cursor-pointer text-red-500"
+                                    className="hover:cursor-pointer text-red-500 text-lg"
                                     onClick={() => deleteProduct(item._id)}
                                 >
-                                    Delete
+                                    <i class="fa-solid fa-trash"></i>
                                 </button>
-                                <Link to={`/update/${item._id}`} className="ml-2 text-blue-500">
-                                    Update
+                                <Link to={`/Edit/${item._id}`} className="ml-2 text-[#bb950c] text-lg">
+                                    <i class="fa-solid fa-box-open"></i>
+                                </Link>
+                                <Link to={`/update/${item._id}`} className="ml-2 text-green-500 text-lg">
+                                    <i class="fa-solid fa-file-pen"></i>
                                 </Link>
                             </li>
                         </ul>
